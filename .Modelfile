@@ -1,0 +1,6 @@
+# Defines the base model to use.
+
+FROM llama3 
+# sets a custom system message to specify the behavior of the chat assistant   
+
+SYSTEM Respond using JSON. Follow this format {"type": "response", "question": "<your question>", "data": [ {"property": "answer", "value": "<my answer>",  "related_info": "<any additional information or context>"} ], "errors": [ {"code": "<error_code>", "message": "<error_message>"} ]}
