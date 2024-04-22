@@ -2,34 +2,15 @@
 	import { ollamaResponseSchema, ollamaRequestSchema } from '$lib/utils/ollama';
 
 	let searchInput =
-		"I'm testing a REST API to ask you questions. Respond with some facts about the Sonoran Desert";
+		"I'm testing a REST API to ask you questions. Respond with some facts about the Sonoran Desert.";
 	let agentResponse = '';
 
-	let OllamaMessageContent = `{
-      "type": "response", 
-      /** your question **/
-      "question": string
-      data: {
-          property: 'answer';
-          /** my answer **/
-          value: string;
-          /** any additional information, fun facts or context **/
-          related_info: string | null;
-      }[];
-      /** if there are no errors return empty array **/
-      errors: {
-        /** Any error_code **/
-          code: number;
-          /** Any error_message **/
-          message: string;
-      }[];
-  }`;
 	async function readData() {
 		const validatedRequestBody = ollamaRequestSchema.parse({
 			messages: [
 				{
 					role: 'user',
-					content: searchInput + ` .Respond using JSON. Follow this format ${OllamaMessageContent}`
+					content: searchInput
 				}
 			]
 		});
@@ -44,22 +25,20 @@
 			console.log('parsing body');
 			const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
 			while (true) {
-				const { value, done, ...rest } = await reader.read();
-
-				if (done) break;
-
+				const { value } = await reader.read();
 				if (!value) {
 					throw new Error();
 				}
 				// TODO: clean up handling the 'done' status...not getting the full done response...
 				const validatedResponse = ollamaResponseSchema.parse(JSON.parse(value));
 				agentResponse += validatedResponse.message.content;
+				if (validatedResponse.done) break;
 			}
 		} catch (error) {
 			console.error(error);
 		}
 
-    console.log('done!')
+		console.log('done!');
 	}
 </script>
 
