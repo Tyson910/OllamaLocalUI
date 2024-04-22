@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { ollamaResponseSchema, ollamaRequestSchema } from '$lib/utils/ollama';
+	import { marked } from 'marked';
+
 
 	let searchInput =
 		"I'm testing a REST API to ask you questions. Respond with some facts about the Sonoran Desert.";
@@ -61,5 +63,5 @@
 </form>
 
 <div class="max-w-screen-lg mx-auto">
-	<p>{agentResponse}</p>
+	{@html marked.parse(agentResponse)}
 </div>
