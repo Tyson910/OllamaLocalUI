@@ -78,8 +78,4 @@
 			Submit
 		</button>
 	</form>
-
-	{#if $message?.text}
-		<p>{$message?.text}</p>
-	{/if}
 </div>
