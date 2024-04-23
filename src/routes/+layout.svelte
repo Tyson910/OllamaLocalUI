@@ -4,4 +4,4 @@
 </script>
 
 <slot />
-<Toaster richColors closeButton />
+<Toaster richColors closeButton duration={10_000}  />
