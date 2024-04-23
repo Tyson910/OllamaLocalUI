@@ -1,5 +1,7 @@
 <script>
-  import "$lib/styles/global.css";
+	import '$lib/styles/global.css';
+	import { Toaster } from 'svelte-sonner';
 </script>
 
 <slot />
+<Toaster richColors closeButton />

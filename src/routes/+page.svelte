@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AtSymbolIcon from 'virtual:icons/heroicons/at-symbol';
 
+	import { toast } from 'svelte-sonner';
 	import { superForm, defaults } from 'sveltekit-superforms';
 	import { zod as SuperFormZod } from 'sveltekit-superforms/adapters';
 
@@ -9,7 +10,12 @@
 	const { form, errors, constraints, message, enhance } = superForm(
 		defaults(SuperFormZod(newUserSchema)),
 		{
-			validators: SuperFormZod(newUserSchema)
+			validators: SuperFormZod(newUserSchema),
+			onUpdated({ form }) {
+				if (form.message?.type == 'success' || form.message?.type == 'error') {
+					toast[form.message.type](form.message.text);
+				}
+			}
 		}
 	);
 	// let files: FileList | null = null;
