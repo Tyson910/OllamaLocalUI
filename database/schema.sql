@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  display_name TEXT NOT NULL,
+  display_name TEXT NOT NULL UNIQUE,
   created_at TEXT NOT NULL,
   updated_at TEXT,
   deleted_at TEXT
