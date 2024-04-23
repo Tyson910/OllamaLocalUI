@@ -1,5 +1,18 @@
 <script lang="ts">
 	import AtSymbolIcon from 'virtual:icons/heroicons/at-symbol';
+
+	import { superForm, defaults } from 'sveltekit-superforms';
+	import { zod as SuperFormZod } from 'sveltekit-superforms/adapters';
+	import { z } from 'zod';
+
+	import { newUserSchema } from '$lib/utils/sqlite-tables-validators';
+
+	const { form, errors, constraints, message, enhance } = superForm(
+		defaults(SuperFormZod(newUserSchema)),
+		{
+			validators: SuperFormZod(newUserSchema)
+		}
+	);
 	// let files: FileList | null = null;
 	// $: if (files) {
 	// 	// Note that `files` is of type `FileList`, not an Array:
@@ -12,7 +25,12 @@
 	// $: avatarImgPreview = files?.item(0);
 </script>
 
-<form class="max-w-screen-xl mx-auto flex flex-col py-10">
+<form
+	use:enhance
+	method="post"
+	action="/?/new-user"
+	class="max-w-screen-xl mx-auto flex flex-col py-10"
+>
 	<div>
 		<label for="displayName" class="text-sm font-medium leading-6 text-gray-900">
 			Display Name
@@ -26,8 +44,16 @@
 				name="displayName"
 				id="displayName"
 				class="w-full rounded-md border-0 py-1.5 pl-9 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+				class:ring-red-500={Array.isArray($errors.display_name) && $errors.display_name.length > 0}
+				bind:value={$form.display_name}
+				{...$constraints.display_name}
 			/>
 		</div>
+		{#if Array.isArray($errors.display_name)}
+			{#each $errors?.display_name as errorMessage}
+				<span class="text-red-500"> {errorMessage} </span>
+			{/each}
+		{/if}
 	</div>
 
 	<!-- add avatar image later! -->
