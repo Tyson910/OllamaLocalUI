@@ -45,7 +45,8 @@ export const POST: RequestHandler = async ({ url, request, ...rest }) => {
 
 		return new Response(destinationStream, {
 			status: 200,
-			headers: { 'Content-Type': 'text/plain' }
+			statusText: 'OK',
+			headers: { 'Content-Type': 'text/plain' },
 		});
 	} catch (err) {
 		console.error(error);
