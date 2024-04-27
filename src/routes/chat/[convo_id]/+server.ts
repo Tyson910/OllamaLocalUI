@@ -3,34 +3,31 @@ import type { RequestHandler } from './$types';
 import { ollamaResponseSchema, ollamaRequestSchema } from '$lib/utils/ollama';
 import { db } from '$lib/utils/kysely';
 
-const ollamaRequestMessageSchema = ollamaRequestSchema.pick({ messages: true });
 
-export const POST: RequestHandler = async ({ url, request, params, ...rest }) => {
+export const POST: RequestHandler = async ({ request, params, ...rest }) => {
 	let agentResponse = '';
 
 	const streamingResponse = request
 		.json()
 		.then(async (data: unknown) => {
-			console.log(data);
-			const messages = ollamaRequestMessageSchema.parse(data);
-		
-		
-			// await db
-			// .insertInto('message')
-			// .values({
-			// 	role: 'user',
-			// 	content: searchInput,
-			// 	convo_id: params.convo_id as unknown as number,
-			// 	created_at: new Date().toISOString()
-			// })
-			// .executeTakeFirst();
+			const validatedReqData = ollamaRequestSchema.parse(data);
+
+			await db
+				.insertInto('message')
+				.values({
+					role: 'user',
+					content: validatedReqData.messages[validatedReqData.messages.length - 1].content,
+					convo_id: params.convo_id as unknown as number,
+					created_at: new Date().toISOString()
+				})
+				.executeTakeFirst();
 
 			const llmResponse = await fetch('http://127.0.0.1:11434/api/chat', {
 				method: 'POST',
 				headers: {
 					'content-type': 'application/json'
 				},
-				body: JSON.stringify(data)
+				body: JSON.stringify(validatedReqData)
 			});
 
 			if (!llmResponse.body) throw new Error('Missing request body!');
@@ -57,7 +54,7 @@ export const POST: RequestHandler = async ({ url, request, params, ...rest }) =>
 							convo_id: params.convo_id as unknown as number,
 							created_at: new Date().toISOString()
 						})
-						.executeTakeFirstOrThrow();
+						.executeTakeFirst();
 				}
 			});
 
