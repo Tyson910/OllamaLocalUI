@@ -8,15 +8,15 @@ export const POST: RequestHandler = async ({ request, params, ...rest }) => {
 		const streamingResponse = await request.json();
 		const validatedReqData = ollamaRequestSchema.parse(streamingResponse);
 
-		// await db
-		// 	.insertInto('message')
-		// 	.values({
-		// 		role: 'user',
-		// 		content: validatedReqData.messages[validatedReqData.messages.length - 1].content,
-		// 		convo_id: params.convo_id as unknown as number,
-		// 		created_at: new Date().toISOString()
-		// 	})
-		// 	.executeTakeFirst();
+		await db
+			.insertInto('message')
+			.values({
+				role: 'user',
+				content: validatedReqData.messages[validatedReqData.messages.length - 1].content,
+				convo_id: params.convo_id as unknown as number,
+				created_at: new Date().toISOString()
+			})
+			.executeTakeFirst();
 
 		const llmResponse = await fetch('http://127.0.0.1:11434/api/chat', {
 			method: 'POST',
@@ -41,7 +41,6 @@ export const POST: RequestHandler = async ({ request, params, ...rest }) => {
 			},
 			async flush(controller) {
 				console.log('Finished parsing stream');
-				// console.log(agentResponse);
 				console.log('Now writing to db');
 				await db
 					.insertInto('message')
@@ -60,8 +59,8 @@ export const POST: RequestHandler = async ({ request, params, ...rest }) => {
 
 		// Pipe the source stream through the transform stream
 		llmResponse.body.pipeTo(transformStream.writable).catch((err) => {
+			// TODO: need better error handling here....
 			console.error('bread:', err);
-			error(500, { message: 'Bread unexpected error has occured' });
 		});
 
 		return new Response(destinationStream, {
