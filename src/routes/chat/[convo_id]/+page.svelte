@@ -2,7 +2,7 @@
 	import { ollamaResponseSchema, ollamaRequestSchema } from '$lib/utils/ollama';
 	import { marked } from 'marked';
 	import type { PageData } from './$types';
-	import { db } from '$lib/utils/kysely';
+	// import { db } from '$lib/utils/kysely';
 
 	import { page } from '$app/stores';
 
@@ -13,15 +13,15 @@
 	let agentResponse = '';
 
 	async function readData() {
-		await db
-			.insertInto('message')
-			.values({
-				role: 'user',
-				content: searchInput,
-				convo_id: $page.params.convo_id as unknown as number,
-				created_at: new Date().toISOString()
-			})
-			.executeTakeFirst();
+		// await db
+		// 	.insertInto('message')
+		// 	.values({
+		// 		role: 'user',
+		// 		content: searchInput,
+		// 		convo_id: $page.params.convo_id as unknown as number,
+		// 		created_at: new Date().toISOString()
+		// 	})
+		// 	.executeTakeFirst();
 
 		agentResponse = '';
 		const validatedRequestBody = ollamaRequestSchema.parse({
@@ -35,39 +35,49 @@
 		});
 
 		console.log('submitting request');
-		const response = await fetch('http://localhost:11434/api/chat', {
+		// const response = await fetch('http://localhost:11434/api/chat', {
+		// 	method: 'POST',
+		// 	body: JSON.stringify(validatedRequestBody)
+		// });
+
+		const response = await fetch('/chat/2', {
 			method: 'POST',
 			body: JSON.stringify(validatedRequestBody)
 		});
 
 		if (!response.body) throw new Error('Missing request body!');
 		try {
-			console.log('parsing body');
 			const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+			console.log(reader);
 			while (true) {
-				const { value } = await reader.read();
+				console.log('reading....');
+				const { value, done } = await reader.read();
 				if (!value) {
-					throw new Error();
+					break;
+					// throw new Error();
 				}
+				console.log('hi', value);
 				const validatedResponse = ollamaResponseSchema.parse(JSON.parse(value));
 				agentResponse += validatedResponse.message.content;
+				console.log(agentResponse);
 				if (validatedResponse.done) break;
+				if (done) break;
 			}
 		} catch (error) {
 			console.error(error);
 		}
 		// TODO: dont do this from the client!
-		await db
-			.insertInto('message')
-			.values({
-				role: 'agent',
-				content: agentResponse,
-				convo_id: $page.params.convo_id as unknown as number,
-				created_at: new Date().toISOString()
-			})
-			.executeTakeFirst();
+		// await db
+		// 	.insertInto('message')
+		// 	.values({
+		// 		role: 'agent',
+		// 		content: agentResponse,
+		// 		convo_id: $page.params.convo_id as unknown as number,
+		// 		created_at: new Date().toISOString()
+		// 	})
+		// 	.executeTakeFirst();
 
-            searchInput = ''
+		// searchInput = ''
 	}
 </script>
 
