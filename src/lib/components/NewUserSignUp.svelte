@@ -20,7 +20,7 @@
 	);
 </script>
 
-<form use:enhance method="post" action="?/new-user" class="flex flex-col py-10">
+<form use:enhance method="post" action="/?/new-user" class="flex flex-col py-10">
 	<div>
 		<label for="display_name" class="text-sm font-medium leading-6 text-gray-900">
 			Display Name
