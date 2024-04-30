@@ -4,6 +4,7 @@
 	import { zod as SuperFormZod } from 'sveltekit-superforms/adapters';
 
 	import { UserSchema, type UserSchemaType } from '$lib/utils/sqlite-tables-validators';
+	import { goto } from '$app/navigation';
 
 	export let users: Pick<UserSchemaType, 'id' | 'created_at' | 'display_name'>[] = [];
 
@@ -13,6 +14,7 @@
 			if (form.message?.type == 'success' || form.message?.type == 'error') {
 				toast[form.message.type](form.message.text);
 			}
+			goto('/chat');
 		}
 	});
 </script>
