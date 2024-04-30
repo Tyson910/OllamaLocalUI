@@ -6,7 +6,10 @@ import { newUserSchema } from '$lib/utils/sqlite-tables-validators';
 import { db } from '$lib/utils/kysely';
 
 export const load = (async () => {
-	const allUsers = await db.selectFrom('user').select(['user.id', 'user.display_name', 'user.created_at']).execute();
+	const allUsers = await db
+		.selectFrom('user')
+		.select(['user.id', 'user.display_name', 'user.created_at'])
+		.execute();
 	return {
 		allUsers
 	};
