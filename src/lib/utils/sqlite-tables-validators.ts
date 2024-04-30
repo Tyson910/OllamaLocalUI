@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 // User schema
 export const UserSchema = z.object({
-	id: z.number().optional(),
+	id: z.number().nullable(),
 	display_name: z
 		.string()
 		.min(1, { message: 'Please provide a value' })
@@ -12,6 +12,7 @@ export const UserSchema = z.object({
 	deleted_at: z.string().datetime({ offset: true }).optional()
 });
 
+export type UserSchemaType = z.infer<typeof UserSchema>; 
 export const newUserSchema = UserSchema.pick({ display_name: true });
 
 // Convo schema

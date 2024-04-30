@@ -2,7 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod as SuperFormZod } from 'sveltekit-superforms/adapters';
 
-import { newUserSchema } from '$lib/utils/sqlite-tables-validators';
+import { newUserSchema, UserSchema } from '$lib/utils/sqlite-tables-validators';
 import { db } from '$lib/utils/kysely';
 
 export const load = (async () => {
@@ -32,6 +32,34 @@ export const actions = {
 				.executeTakeFirst();
 
 			return message(form, { text: 'Success!', type: 'success' });
+		} catch (error) {
+			console.error(error);
+			return message(form, { text: 'Unexpected Error', type: 'error' });
+		}
+	},
+	'sign-in': async (event) => {
+		const form = await superValidate(event.request, SuperFormZod(UserSchema.pick({ id: true })));
+
+		if (!form.valid) {
+			// Will return fail(400, { form }) since form isn't valid
+			return message(form, { text: 'Invalid form', type: 'error' });
+		}
+
+		try {
+			const user = await db
+				.selectFrom('user')
+				.select(['user.id', 'user.display_name', 'user.created_at'])
+				.executeTakeFirst();
+
+			if (!user) {
+				return message(form, { text: 'User not found!', type: 'error' });
+			}
+
+			event.cookies.set('user_id', user.id?.toString(), {
+				path: '/',
+				httpOnly: true
+			});
+			return message(form, { text: `Success! Logged in as ${user.display_name}`, type: 'success' });
 		} catch (error) {
 			console.error(error);
 			return message(form, { text: 'Unexpected Error', type: 'error' });
