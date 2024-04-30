@@ -6,7 +6,10 @@ import { newUserSchema } from '$lib/utils/sqlite-tables-validators';
 import { db } from '$lib/utils/kysely';
 
 export const load = (async () => {
-	return {};
+	const allUsers = await db.selectFrom('user').select(['user.id', 'user.display_name', 'user.created_at']).execute();
+	return {
+		allUsers
+	};
 }) satisfies PageServerLoad;
 
 export const actions = {
@@ -29,7 +32,6 @@ export const actions = {
 		} catch (error) {
 			console.error(error);
 			return message(form, { text: 'Unexpected Error', type: 'error' });
-
 		}
 	}
 } satisfies Actions;
