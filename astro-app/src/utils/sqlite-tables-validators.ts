@@ -1,4 +1,5 @@
-import { z } from 'zod';
+// use astro zod to ensure compatibility
+import { z } from 'astro:actions';
 
 // User schema
 export const UserSchema = z.object({
@@ -12,7 +13,7 @@ export const UserSchema = z.object({
 	deleted_at: z.string().datetime({ offset: true }).optional()
 });
 
-export type UserSchemaType = z.infer<typeof UserSchema>; 
+export type UserSchemaType = z.infer<typeof UserSchema>;
 export const newUserSchema = UserSchema.pick({ display_name: true });
 
 // Convo schema
