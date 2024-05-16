@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:codegen": "kysely-codegen"
   },
   "dependencies": {
     "@astrojs/check": "^0.6.0",
@@ -28,6 +29,7 @@
     "@tailwindcss/forms": "^0.5.7",
     "classnames": "^2.5.1",
     "kysely": "^0.27.3",
+    "kysely-codegen": "^0.15.0",
     "marked": "^12.0.2",
     "unplugin-icons": "^0.19.0",
     "zod": "^3.23.8"
