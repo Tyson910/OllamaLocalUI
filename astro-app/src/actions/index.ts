@@ -3,7 +3,7 @@ import { newUserSchema, UserSchema } from '@utils/sqlite-tables-validators';
 import { db } from '@utils/kysely';
 
 export const server = {
-	'new-user': defineAction({
+	newUser: defineAction({
 		input: newUserSchema,
 		handler: async (data) => {
 			try {
@@ -20,13 +20,14 @@ export const server = {
 			}
 		}
 	}),
-	'sign-in': defineAction({
+	signIn: defineAction({
 		input: UserSchema.pick({ id: true }),
 		handler: async (data) => {
 			try {
 				const user = await db
 					.selectFrom('user')
 					.select(['user.id', 'user.display_name', 'user.created_at'])
+					.where('user.id', '=', data.id)
 					.executeTakeFirst();
 				if (!user || !user.id) {
 					throw new ActionError({
