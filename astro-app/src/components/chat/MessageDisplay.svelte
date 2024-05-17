@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { marked } from 'marked';
-	import type { ComponentProps } from 'svelte';
+	import type { DB } from '@utils/kysely';
 
-	import RootChatComponent from './index.svelte';
-	
-	export let messages: ComponentProps<RootChatComponent>['messages'];
+	export let messages: DB['message'][] = [];
 </script>
 
 <div>
