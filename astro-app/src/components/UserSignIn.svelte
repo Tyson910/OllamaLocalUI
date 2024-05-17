@@ -10,8 +10,9 @@
 			const result = await actions.signIn({ id: userId });
 			toast.success(result);
 			// navigate to chat!
-      // window.location.href = '/chat'
-			// 		goto('/chat');
+			setTimeout(() => {
+				window.location.href = '/convo';
+			}, 1000);
 		} catch (error) {
 			if (error instanceof ActionError) {
 				toast.error(error.message);
