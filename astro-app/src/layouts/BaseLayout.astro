@@ -1,3 +1,7 @@
+---
+	import { Toaster } from 'svelte-sonner';
+
+---
 <html lang="en" class="h-full">
 	<head>
 		<meta charset="utf-8" />
@@ -9,6 +13,7 @@
 	<body class="min-h-full flex flex-col">
     <main class="flex-grow">
       <slot />
+			<Toaster client:load richColors closeButton duration={10_000}  />
     </main>
 	</body>
 </html>

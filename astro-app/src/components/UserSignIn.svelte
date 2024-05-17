@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Toaster, toast } from 'svelte-sonner';
+	import { toast } from 'svelte-sonner';
 	import type { UserSchemaType } from '@utils/sqlite-tables-validators';
 	import { actions, ActionError } from 'astro:actions';
 
@@ -22,7 +22,6 @@
 	}
 </script>
 
-<Toaster />
 <ul role="list" class="divide-y divide-gray-100">
 	{#each users as user}
 		<li class="flex items-center justify-between gap-x-6 py-5">
