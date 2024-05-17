@@ -27,3 +27,8 @@ export const ollamaRequestSchema = z.object({
 });
 
 // type OllamaRequest = z.infer<typeof ollamaRequestSchema>;
+
+import ollamaBrowser from 'ollama/browser';
+import ollamaNode from 'ollama';
+
+export { ollamaBrowser, ollamaNode };
