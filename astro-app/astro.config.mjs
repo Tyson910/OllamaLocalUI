@@ -14,5 +14,10 @@ export default defineConfig({
 	experimental: {
 		actions: true
 	},
-	integrations: [svelte(), tailwind(), react()]
+	integrations: [svelte(), tailwind(), react()],
+	vite: {
+		ssr: {
+			noExternal: ['svelte-sonner']
+		}
+	}
 });
