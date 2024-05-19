@@ -2,7 +2,7 @@
 	import { marked } from 'marked';
 	import type { DB } from '@utils/kysely';
 
-	export let messages: DB['message'][] = [];
+	export let messages: Pick<DB['message'], 'role' | 'content'>[] = [];
 </script>
 
 <div>
