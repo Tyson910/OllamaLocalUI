@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { db } from '@utils/kysely';
+
+import Chat from '@components/chat/index.svelte';
+const convoHistory = await db
+	.selectFrom('message')
+	.select(['message.id', 'message.role', 'message.content'])
+	.where('message.convo_id', '=', Astro.params.convo_id)
+	.execute();
+---
+
+<BaseLayout>
+	<!-- {JSON.stringify(convoHistory)} -->
+	<Chat client:load messages={convoHistory} />
+</BaseLayout>

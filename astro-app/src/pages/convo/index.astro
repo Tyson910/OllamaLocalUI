@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { db } from '@utils/kysely';
+
+const userId = Astro.cookies.get('user_id');
+
+if (!userId?.value) {
+	return Astro.redirect('/404');
+}
+
+const allConvos = await db
+	.selectFrom('convo')
+	.select(['convo.id', 'convo.title'])
+	.where('convo.user_id', '=', userId.value)
+	.execute();
+---
+
+<BaseLayout>
+	<p class="text-red-500">Chat History</p>
+</BaseLayout>
