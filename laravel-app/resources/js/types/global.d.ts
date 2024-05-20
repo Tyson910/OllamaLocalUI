@@ -6,5 +6,6 @@ declare global {
         axios: AxiosInstance;
     }
 
+    // eslint-disable-next-line no-var
     var route: typeof ziggyRoute;
 }
