@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, Fragment, PropsWithChildren, Dispatch, SetStateAction } from 'react';
+import { useState, createContext, useContext, Fragment, type PropsWithChildren, type Dispatch, type SetStateAction } from 'react';
 import { Link, InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
