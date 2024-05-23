@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-export default function DangerButton({ className = '', disabled, children, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
+export function DangerButton({ className = '', disabled, children, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) {
     return (
         <button
             {...props}

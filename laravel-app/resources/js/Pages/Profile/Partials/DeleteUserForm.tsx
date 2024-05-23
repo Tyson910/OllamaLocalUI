@@ -1,5 +1,5 @@
 import { useRef, useState, type FormEventHandler } from 'react';
-import DangerButton from '@/Components/DangerButton';
+import { DangerButton } from '@/Components/DangerButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import Modal from '@/Components/Modal';
