@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ConvoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -29,4 +30,7 @@ Route::resource('convos', ConvoController::class)
     ->only(['index', 'store'])
     ->middleware(['auth', 'verified']);
 
+Route::resource('messages', ConvoController::class)
+    ->only(['index', 'store'])
+    ->middleware(['auth', 'verified']);
 require __DIR__.'/auth.php';
