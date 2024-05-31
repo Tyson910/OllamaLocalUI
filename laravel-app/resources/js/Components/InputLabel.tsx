@@ -1,6 +1,6 @@
 import type { LabelHTMLAttributes } from 'react';
 
-export default function InputLabel({
+export function InputLabel({
   value,
   className = '',
   children,
