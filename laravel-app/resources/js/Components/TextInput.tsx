@@ -6,7 +6,7 @@ import {
   type InputHTMLAttributes,
 } from 'react';
 
-export default forwardRef(function TextInput(
+export const TextInput = forwardRef(function TextInput(
   {
     type = 'text',
     className = '',
@@ -39,3 +39,5 @@ export default forwardRef(function TextInput(
     />
   );
 });
+
+// TextInput.displayName = 'TextInput';
