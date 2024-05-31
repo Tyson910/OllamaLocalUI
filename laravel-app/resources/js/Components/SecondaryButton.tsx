@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-export default function SecondaryButton({
+export function SecondaryButton({
   type = 'button',
   className = '',
   disabled,
