@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Convo;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Str;
 
 class ConvoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() : Response
+    public function index(): Response
     {
         return Inertia::render('Convos/Index', [
             // can add props here
@@ -42,6 +42,7 @@ class ConvoController extends Controller
         $validated = $request->safe()->merge(['id' => Str::ulid()->toBase32()]);
 
         $request->user()->chats()->create($validated);
+
         return redirect(route('chats.index'));
     }
 

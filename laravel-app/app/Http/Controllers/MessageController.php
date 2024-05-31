@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
@@ -39,12 +38,13 @@ class MessageController extends Controller
         $validated = $request->validate([
             // 'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'role' => 'required|string'
+            'role' => 'required|string',
         ]);
 
         $validated = $request->safe()->merge(['id' => Str::ulid()->toBase32()]);
 
         $request->chats()->messages()->create($validated);
+
         return redirect(route('messages.index'));
     }
 

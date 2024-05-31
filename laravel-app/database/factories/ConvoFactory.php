@@ -22,5 +22,4 @@ class ConvoFactory extends Factory
             'title' => fake()->unique()->catchPhrase(),
         ];
     }
-
 }
