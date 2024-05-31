@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ConvoController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
