@@ -1,7 +1,15 @@
 import { Fragment, type PropsWithChildren } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-export default function Modal({
+const maxWidthClasses = {
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-md',
+  lg: 'sm:max-w-lg',
+  xl: 'sm:max-w-xl',
+  '2xl': 'sm:max-w-2xl',
+} as const;
+
+export function Modal({
   children,
   show = false,
   maxWidth = '2xl',
@@ -9,7 +17,7 @@ export default function Modal({
   onClose = () => {},
 }: PropsWithChildren<{
   show: boolean;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
+  maxWidth?: keyof typeof maxWidthClasses;
   closeable?: boolean;
   onClose: CallableFunction;
 }>) {
@@ -19,14 +27,7 @@ export default function Modal({
     }
   };
 
-  const maxWidthClass = {
-    sm: 'sm:max-w-sm',
-    md: 'sm:max-w-md',
-    lg: 'sm:max-w-lg',
-    xl: 'sm:max-w-xl',
-    '2xl': 'sm:max-w-2xl',
-  }[maxWidth];
-
+  const maxWidthClass = maxWidthClasses[maxWidth];
   return (
     <Transition show={show} as={Fragment} leave='duration-200'>
       <Dialog
