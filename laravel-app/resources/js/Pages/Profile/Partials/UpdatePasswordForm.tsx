@@ -1,5 +1,5 @@
 import { useRef, type FormEventHandler } from 'react';
-import InputError from '@/Components/InputError';
+import { InputError } from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
