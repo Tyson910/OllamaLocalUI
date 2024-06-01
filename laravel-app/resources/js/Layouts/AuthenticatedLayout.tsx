@@ -29,6 +29,9 @@ export function AuthenticatedLayout({
                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                   Dashboard
                 </NavLink>
+                <NavLink href={route('convos.index')} active={route().current('convos.index')}>
+                  Convo History
+                </NavLink>
               </div>
             </div>
 
@@ -99,6 +102,12 @@ export function AuthenticatedLayout({
           <div className='pt-2 pb-3 space-y-1'>
             <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
               Dashboard
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              href={route('convos.index')}
+              active={route().current('convos.index')}
+            >
+              Convo History
             </ResponsiveNavLink>
           </div>
 
