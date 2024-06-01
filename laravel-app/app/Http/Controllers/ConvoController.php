@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Convo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Auth;
 
 class ConvoController extends Controller
 {
@@ -17,9 +17,8 @@ class ConvoController extends Controller
      */
     public function index(): Response
     {
-        // TODO: use real id soon
-        // $id = Auth::id();
-        $id = '01HYHJ0BJ61NCG0CRR97H5MZ11';
+        $id = Auth::id();
+
         // get all convos for a user
         return Inertia::render('Convos/Index', [
             // can add props here
@@ -41,15 +40,17 @@ class ConvoController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        $validated = $request->validate([
+        $validatedReq = $request->validate([
             'title' => 'required|string|max:255',
         ]);
 
-        $validated = $request->safe()->merge(['id' => Str::ulid()->toBase32()]);
+        $request->user()->convos()->create([
+            'title' => $validatedReq['title'],
+            'id' => Str::ulid()->toBase32(),
+            'user_id' => Auth::id(),
+        ]);
 
-        $request->user()->chats()->create($validated);
-
-        return redirect(route('chats.index'));
+        return redirect(route('convos.index'));
     }
 
     /**
