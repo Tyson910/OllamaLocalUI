@@ -68,7 +68,6 @@ function ConvoPreview({ convo }: { convo: Convo }) {
     patch(route('convos.update', convo.id), { onSuccess: () => setEditing(false) });
   }
 
-  console.log(auth)
   return (
     <div className='p-6 flex space-x-2'>
       <a href={`/convos/${convo.id}`} className='flex-1 group hover:cursor-pointer'>
