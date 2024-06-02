@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Convo;
 use App\Models\User;
+use Illuminate\Auth\Access\Response;
 
 // use Illuminate\Auth\Access\Response;
 
@@ -20,9 +21,11 @@ class ConvoPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Convo $convo): bool
+    public function view(User $user, Convo $convo): Response
     {
-        return $convo->user()->is($user);
+        return $convo->user()->is($user)
+            ? Response::allow()
+            : Response::denyAsNotFound();
     }
 
     /**
@@ -37,7 +40,7 @@ class ConvoPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Convo $convo): bool
+    public function update(User $user, Convo $convo): Response
     {
         // same logic as view method
         return $this->view($user, $convo);
@@ -46,7 +49,7 @@ class ConvoPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Convo $convo): bool
+    public function delete(User $user, Convo $convo): Response
     {
         // same logic as view method
         return $this->view($user, $convo);
@@ -55,7 +58,7 @@ class ConvoPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Convo $convo): bool
+    public function restore(User $user, Convo $convo): Response
     {
         // same logic as view method
         return $this->view($user, $convo);
@@ -64,7 +67,7 @@ class ConvoPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Convo $convo): bool
+    public function forceDelete(User $user, Convo $convo): Response
     {
         return $this->view($user, $convo);
     }
