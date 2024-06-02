@@ -6,10 +6,10 @@ use App\Models\Convo;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Gate;
 
 class ConvoController extends Controller
 {
@@ -76,7 +76,7 @@ class ConvoController extends Controller
     public function update(Request $request, Convo $convo): RedirectResponse
     {
         Gate::authorize('update', $convo);
-        
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
         ]);
