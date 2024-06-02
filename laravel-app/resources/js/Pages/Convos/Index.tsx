@@ -2,11 +2,12 @@ import type { PageProps } from '@/types';
 import { AuthenticatedLayout } from '@/Layouts/AuthenticatedLayout';
 
 import { useState } from 'react';
-import { useForm, Head, usePage } from '@inertiajs/react';
+import { useForm, Head } from '@inertiajs/react';
 import { InputError } from '@/Components/InputError';
 import { TextInput } from '@/Components/TextInput';
 import { PrimaryButton } from '@/Components/PrimaryButton';
 import { Dropdown } from '@/Components/Dropdown';
+import { useTypeSafePage } from '@/utils/hooks';
 
 type Convo = {
   id: string;
@@ -28,6 +29,7 @@ export default function ConvosHub({ auth, ziggy, convos }: ConvosHubProps) {
     e.preventDefault();
     post(route('convos.store'), { onSuccess: () => reset() });
   }
+
   return (
     <AuthenticatedLayout user={auth.user}>
       <Head title='Convo History' />
@@ -53,7 +55,7 @@ export default function ConvosHub({ auth, ziggy, convos }: ConvosHubProps) {
 
 // TODO: find a better abstraction for this component
 function ConvoPreview({ convo }: { convo: Convo }) {
-  const { auth } = usePage().props;
+  const { auth } = useTypeSafePage().props;
 
   const [editing, setEditing] = useState(false);
 
@@ -66,9 +68,10 @@ function ConvoPreview({ convo }: { convo: Convo }) {
     patch(route('convos.update', convo.id), { onSuccess: () => setEditing(false) });
   }
 
+  console.log(auth)
   return (
     <div className='p-6 flex space-x-2'>
-      <div className='flex-1 group hover:cursor-pointer'>
+      <a href={`/convos/${convo.id}`} className='flex-1 group hover:cursor-pointer'>
         <div className='flex justify-between items-center'>
           <div className='w-full'>
             {editing ? (
@@ -101,7 +104,7 @@ function ConvoPreview({ convo }: { convo: Convo }) {
             </small>
           </div>
         </div>
-      </div>
+      </a>
       <Dropdown>
         <Dropdown.Trigger>
           <button>
