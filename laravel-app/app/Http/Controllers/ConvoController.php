@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Gate;
 
 class ConvoController extends Controller
 {
@@ -72,9 +73,17 @@ class ConvoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Convo $convo)
+    public function update(Request $request, Convo $convo): RedirectResponse
     {
-        //
+        Gate::authorize('update', $convo);
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+
+        $convo->update($validated);
+
+        return redirect(route('convos.index'));
     }
 
     /**
