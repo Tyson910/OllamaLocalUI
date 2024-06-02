@@ -93,6 +93,7 @@ class ConvoController extends Controller
     {
         Gate::authorize('update', $convo);
         $convo->delete();
+
         return redirect(route('convos.index'));
     }
 }
