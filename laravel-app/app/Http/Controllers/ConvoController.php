@@ -89,8 +89,10 @@ class ConvoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Convo $convo)
+    public function destroy(Convo $convo): RedirectResponse
     {
-        //
+        Gate::authorize('update', $convo);
+        $convo->delete();
+        return redirect(route('convos.index'));
     }
 }

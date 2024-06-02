@@ -51,7 +51,8 @@ export default function ConvosHub({ auth, ziggy, convos }: ConvosHubProps) {
   );
 }
 
-export function ConvoPreview({ convo }: { convo: Convo }) {
+// TODO: find a better abstraction for this component
+function ConvoPreview({ convo }: { convo: Convo }) {
   const { auth } = usePage().props;
 
   const [editing, setEditing] = useState(false);
@@ -67,7 +68,7 @@ export function ConvoPreview({ convo }: { convo: Convo }) {
 
   return (
     <div className='p-6 flex space-x-2'>
-      <div className='flex-1'>
+      <div className='flex-1 group hover:cursor-pointer'>
         <div className='flex justify-between items-center'>
           <div className='w-full'>
             {editing ? (
@@ -93,7 +94,7 @@ export function ConvoPreview({ convo }: { convo: Convo }) {
                 </div>
               </form>
             ) : (
-              <p className='mb-1 text-lg text-gray-900'>{convo.title}</p>
+              <p className='mb-1 text-lg text-gray-900 group-hover:underline'>{convo.title}</p>
             )}
             <small className='text-sm text-gray-600'>
               {new Date(convo.created_at).toLocaleString()}
@@ -114,7 +115,6 @@ export function ConvoPreview({ convo }: { convo: Convo }) {
             </svg>
           </button>
         </Dropdown.Trigger>
-
         <Dropdown.Content>
           <button
             className='block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out'
@@ -122,6 +122,9 @@ export function ConvoPreview({ convo }: { convo: Convo }) {
           >
             Edit
           </button>
+          <Dropdown.Link as='button' href={route('convos.destroy', convo.id)} method='delete'>
+            Delete
+          </Dropdown.Link>
         </Dropdown.Content>
       </Dropdown>
     </div>

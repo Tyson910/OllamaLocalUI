@@ -30,6 +30,7 @@ class ConvoPolicy
      */
     public function create(User $user): bool
     {
+        // anyone can create a model
         return true;
     }
 
@@ -38,7 +39,8 @@ class ConvoPolicy
      */
     public function update(User $user, Convo $convo): bool
     {
-        return $convo->user()->is($user);
+        // same logic as view method
+        return $this->view($user, $convo);
     }
 
     /**
@@ -46,7 +48,8 @@ class ConvoPolicy
      */
     public function delete(User $user, Convo $convo): bool
     {
-        return $convo->user()->is($user);
+        // same logic as view method
+        return $this->view($user, $convo);
     }
 
     /**
@@ -54,8 +57,8 @@ class ConvoPolicy
      */
     public function restore(User $user, Convo $convo): bool
     {
-        return $convo->user()->is($user);
-
+        // same logic as view method
+        return $this->view($user, $convo);
     }
 
     /**
@@ -63,6 +66,6 @@ class ConvoPolicy
      */
     public function forceDelete(User $user, Convo $convo): bool
     {
-        return $convo->user()->is($user);
+        return $this->view($user, $convo);
     }
 }

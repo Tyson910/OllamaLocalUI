@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('convos', ConvoController::class)
-    ->only(['index', 'store', 'update'])
+    ->only(['index', 'store', 'update', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 Route::resource('messages', MessageController::class)
