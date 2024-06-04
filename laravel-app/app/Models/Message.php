@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use App\Models\Convo;
 
 class Message extends Model
 {
@@ -25,4 +27,12 @@ class Message extends Model
         'content',
         'role',
     ];
+
+    /**
+     * Get the messages's user.
+     */
+    public function messageOwner(): HasOneThrough
+    {
+        return $this->through('convo')->has('user');
+    }
 }
