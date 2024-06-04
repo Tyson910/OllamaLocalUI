@@ -59,7 +59,20 @@ class ConvoController extends Controller
      */
     public function show(Convo $convo)
     {
-        //
+
+        $messages = Convo::findOrFail($convo->id)->messages; 
+        return Inertia::render('Convos/[id]', [
+            // ALWAYS included on first visit...
+            // OPTIONALLY included on partial reloads...
+            // ALWAYS evaluated...
+            'convo' => $convo,
+            // ALWAYS included on first visit...
+            // OPTIONALLY included on partial reloads...
+            // ONLY evaluated when needed...
+            'messages' => fn () => Convo::findOrFail($convo->id)->messages
+        ]);
+
+        
     }
 
     /**
