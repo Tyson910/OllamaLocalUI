@@ -13,6 +13,7 @@
     "verbatimModuleSyntax": true,
     "paths": {
       "@/*": ["./resources/js/*"],
+      "@/utils/*": ["./resources/js/utils/*"],
       "ziggy-js": ["./vendor/tightenco/ziggy"]
     },
     "types": [
