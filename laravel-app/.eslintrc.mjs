@@ -6,7 +6,7 @@ import globals from 'globals';
 /** @type { import("eslint").Linter.Config } */
 export default {
   root: true,
-  globals,
+  // globals,
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -14,11 +14,11 @@ export default {
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react'],
+  // plugins: ['@typescript-eslint'],
   parserOptions: {
     sourceType: 'module',
     ecmaVersion: 2020,
-    extraFileExtensions: ['.svelte'],
+    // extraFileExtensions: ['.tsx'],
   },
   env: {
     browser: true,
