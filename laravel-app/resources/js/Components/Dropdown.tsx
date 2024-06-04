@@ -7,7 +7,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from 'react';
-import { Link, InertiaLinkProps } from '@inertiajs/react';
+import { Link, type InertiaLinkProps } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
 
 const DropDownContext = createContext<{
