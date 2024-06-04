@@ -14,7 +14,10 @@
     "paths": {
       "@/*": ["./resources/js/*"],
       "ziggy-js": ["./vendor/tightenco/ziggy"]
-    }
+    },
+    "types": [
+      "unplugin-icons/types/react",
+    ]
   },
   "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
 }
