@@ -31,7 +31,7 @@ Route::resource('convos', ConvoController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('messages', MessageController::class)
-    ->only(['index', 'store'])
+    ->only(['store'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
