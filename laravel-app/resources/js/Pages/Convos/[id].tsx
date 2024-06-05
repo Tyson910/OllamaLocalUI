@@ -1,7 +1,7 @@
 import type { PageProps } from '@/types';
 import type { Convo, Message } from './types';
 
-import { useForm, Head, router } from '@inertiajs/react';
+import { useForm, Head } from '@inertiajs/react';
 import ReactMarkdown from 'react-markdown';
 import { AuthenticatedLayout } from '@/Layouts/AuthenticatedLayout';
 import { InputError } from '@/Components/InputError';
@@ -65,19 +65,11 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
             onChange={(e) => setData('content', e.target.value)}
             value={data.content}
           ></textarea>
-          <input type='hidden' name='convo_id' value={convo.id} />
-          <input type='hidden' name='role' value={'user'} />
           <InputError message={errors.content} className='mt-2' />
           <p className='dark:text-white'>{status}</p>
-          {messages?.length == 0 ? (
-            <PrimaryButton className='mt-4' disabled={processing || isPending}>
-              New Convo
-            </PrimaryButton>
-          ) : (
-            <PrimaryButton className='mt-4' disabled={processing || isPending}>
-              Submit
-            </PrimaryButton>
-          )}
+          <PrimaryButton className='mt-4' disabled={processing} isLoading={isPending}>
+            {messages?.length == 0 ? 'New Convo' : 'Submit'}
+          </PrimaryButton>
         </form>
       </div>
     </AuthenticatedLayout>
