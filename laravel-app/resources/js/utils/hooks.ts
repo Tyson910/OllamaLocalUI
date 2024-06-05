@@ -2,6 +2,7 @@ import type { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
+import { ollamaRequestSchema, type OllamaRequest } from '@/utils/ollama';
 
 export function useTypeSafePage() {
   return usePage<PageProps>();
@@ -18,28 +19,14 @@ export function useStreamResponse({
   const [data, setData] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { mutate: startStream } = useMutation({
-    mutationFn: async (messageContent: string) => {
-      // const ollamaRequestSchema = z.object({
-      //   model: modelEnumSchema,
-      //   stream: z.boolean().default(true),
-      //   messages: z
-      //     .object({
-      //       role: roleEnumSchema,
-      //       content: z.string(),
-      //     })
-      //     .array(),
-      // });
-
+    mutationFn: async (messageContent: OllamaRequest['messages']) => {
+      const validatedOllamaRequestBody = ollamaRequestSchema.parse({ messages: messageContent });
       const response = await fetch('http://127.0.0.1:11434/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          messages: [{ content: messageContent, role: 'user' }],
-          stream: true,
-          model: 'llama3',
-        }),
+        body: JSON.stringify(validatedOllamaRequestBody),
       });
 
       if (!response.body) {
