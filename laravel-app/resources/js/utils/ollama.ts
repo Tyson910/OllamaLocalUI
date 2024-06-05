@@ -19,6 +19,7 @@ export type OllamaResponse = z.infer<typeof ollamaResponseSchema>;
 export const ollamaRequestSchema = z.object({
 	model: modelEnumSchema,
 	stream: z.boolean().default(true),
+	keep_alive: z.boolean().default(true),
 	messages: z
 		.object({
 			role: roleEnumSchema,
