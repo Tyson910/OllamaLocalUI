@@ -2,17 +2,13 @@ import type { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ollamaRequestSchema, type OllamaRequest } from '@/utils/ollama';
+import { ollamaRequestSchema, type OllamaRequest, ollamaResponseSchema } from '@/utils/ollama';
 
 export function useTypeSafePage() {
   return usePage<PageProps>();
 }
 
-export function useStreamResponse({
-  streamCallback,
-}: {
-  streamCallback: React.Dispatch<React.SetStateAction<string>>;
-}) {
+export function useStreamResponse() {
   // entire response text
   const [responses, setResponses] = useState('');
   // data I want to send to consumer/caller
@@ -54,9 +50,8 @@ export function useStreamResponse({
 
       try {
         // TODO: use zod schema to parse these responses
-        const obj = JSON.parse(text);
-        setResponses((prev) => prev + obj?.message?.content);
-        streamCallback((prevValue) => prevValue + obj?.message?.content);
+        const obj = ollamaResponseSchema.parse(JSON.parse(text));
+        setResponses((prev) => prev + obj.message.content);
       } catch (err) {
         console.log(err);
       }
