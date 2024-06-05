@@ -11,10 +11,11 @@ export function useTypeSafePage() {
 export function useStreamResponse() {
   // entire response text
   const [responses, setResponses] = useState('');
-  // data I want to send to consumer/caller
-  const [data, setData] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
-  const { mutate: startStream } = useMutation({
+  const {
+    mutate: startStream,
+    isPending,
+    ...rest
+  } = useMutation({
     mutationFn: async (messageContent: OllamaRequest['messages']) => {
       const validatedOllamaRequestBody = ollamaRequestSchema.parse({ messages: messageContent });
       const response = await fetch('http://127.0.0.1:11434/api/chat', {
@@ -29,36 +30,24 @@ export function useStreamResponse() {
         throw new Error('ReadableStream not supported in this browser.');
       }
 
-      const reader = response.body.getReader();
-      return reader;
-    },
-    onSuccess: (reader) => {
-      setIsLoading(true);
-      readStream(reader);
+      const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        if (!value) {
+          throw new Error();
+        }
+
+        try {
+          const validatedResponse = ollamaResponseSchema.parse(JSON.parse(value));
+          setResponses((prev) => prev + validatedResponse.message.content);
+          if (validatedResponse.done) break;
+        } catch (err) {
+          console.log(err);
+        }
+      }
     },
   });
 
-  async function readStream(reader: ReadableStreamDefaultReader) {
-    async function read() {
-      const { done, value } = await reader.read();
-      if (done) {
-        setIsLoading(false);
-        return;
-      }
-
-      const text = new TextDecoder().decode(value);
-
-      try {
-        // TODO: use zod schema to parse these responses
-        const obj = ollamaResponseSchema.parse(JSON.parse(text));
-        setResponses((prev) => prev + obj.message.content);
-      } catch (err) {
-        console.log(err);
-      }
-      read();
-    }
-    read();
-  }
-
-  return { responses, data, startStream, isLoading };
+  return { responses, startStream, isPending, ...rest };
 }
