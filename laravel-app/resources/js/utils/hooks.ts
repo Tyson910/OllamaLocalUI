@@ -1,5 +1,5 @@
 import type { PageProps } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 import {
@@ -21,8 +21,15 @@ export function useStreamResponse() {
     isPending,
     ...rest
   } = useMutation({
-    mutationFn: async (messageContent: OllamaRequest['messages']) => {
+    mutationFn: async ({
+      messageContent,
+      convo_id,
+    }: {
+      messageContent: OllamaRequest['messages'];
+      convo_id: string;
+    }) => {
       const validatedOllamaRequestBody = ollamaRequestSchema.parse({ messages: messageContent });
+      let message = '';
       // ? replace w axios?
       const response = await fetch('http://127.0.0.1:11434/api/chat', {
         method: 'POST',
@@ -61,11 +68,29 @@ export function useStreamResponse() {
             }
             return validatedResponse;
           });
-          if (validatedResponse.done) break;
+          message += validatedResponse.message.content;
+          if (validatedResponse.done) {
+            break;
+          }
         } catch (err) {
-          console.log(err);
+          console.error('err', err);
         }
       }
+
+      router.post(
+        route('messages.store'),
+        {
+          content: message,
+          convo_id,
+          role: 'assistant',
+        },
+        {
+          preserveScroll: true,
+          onSuccess() {
+            setstreamResponse(null);
+          },
+        },
+      );
     },
   });
 
