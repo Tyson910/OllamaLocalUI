@@ -29,10 +29,19 @@ export default function ConvoDetails({ auth, ziggy, convo, messages,  ...rest }:
   console.log(messages)
   return (
     <AuthenticatedLayout user={auth.user}>
-      <Head title={`Convo | ${convo.title}`} />
+      <Head title={convo.title} />
       <div className='max-w-2xl mx-auto p-4 sm:p-6 lg:p-8'>
         <h1 className='text-6xl mb-4 font-bold text-center dark:text-white'>{convo.title}</h1>
-        <form onSubmit={submit}>
+        <div className='m'>
+          {messages.map((message) => (
+            <ReactMarkdown
+              className='odd:bg-green-300 even:bg-green-200 rounded p-5 divide-y-yellow-500 divide-y'
+              key={message.id}
+              children={message.content}
+            />
+          ))}
+        </div>
+        <ReactMarkdown className='dark:text-white' children={responses} />
           <textarea
             className='block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm'
             onChange={(e) => setData('content', e.target.value)}
