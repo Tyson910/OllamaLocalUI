@@ -18,6 +18,7 @@ export function useStreamResponse() {
   } = useMutation({
     mutationFn: async (messageContent: OllamaRequest['messages']) => {
       const validatedOllamaRequestBody = ollamaRequestSchema.parse({ messages: messageContent });
+      // ? replace w axios?
       const response = await fetch('http://127.0.0.1:11434/api/chat', {
         method: 'POST',
         headers: {
@@ -26,6 +27,9 @@ export function useStreamResponse() {
         body: JSON.stringify(validatedOllamaRequestBody),
       });
 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
       if (!response.body) {
         throw new Error('ReadableStream not supported in this browser.');
       }
