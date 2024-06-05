@@ -15,7 +15,8 @@ interface ConvoDetailProps extends PageProps {
 
 export default function ConvoDetails({ auth, ziggy, convo, messages,  ...rest }: ConvoDetailProps) {
   const { data, setData, post, processing, reset, errors } = useForm({
-    content: '',
+    content:
+      "I'm testing a REST API to ask you questions. Respond with some facts about the Sonoran Desert.",
     convo_id: convo.id,
     role: 'user',
   });
