@@ -2,15 +2,20 @@ import type { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { ollamaRequestSchema, type OllamaRequest, ollamaResponseSchema } from '@/utils/ollama';
+import {
+  ollamaRequestSchema,
+  type OllamaRequest,
+  ollamaResponseSchema,
+  type OllamaResponse,
+} from '@/utils/ollama';
 
 export function useTypeSafePage() {
   return usePage<PageProps>();
 }
 
 export function useStreamResponse() {
-  // entire response text
-  const [responses, setResponses] = useState('');
+  const [streamResponse, setstreamResponse] = useState<OllamaResponse | null>(null);
+
   const {
     mutate: startStream,
     isPending,
@@ -44,7 +49,18 @@ export function useStreamResponse() {
 
         try {
           const validatedResponse = ollamaResponseSchema.parse(JSON.parse(value));
-          setResponses((prev) => prev + validatedResponse.message.content);
+          setstreamResponse((prev) => {
+            if (prev != null) {
+              return {
+                ...prev,
+                message: {
+                  ...prev.message,
+                  content: prev.message.content + validatedResponse.message.content,
+                },
+              };
+            }
+            return validatedResponse;
+          });
           if (validatedResponse.done) break;
         } catch (err) {
           console.log(err);
@@ -53,5 +69,5 @@ export function useStreamResponse() {
     },
   });
 
-  return { responses, startStream, isPending, ...rest };
+  return { streamResponse, startStream, isPending, ...rest };
 }
