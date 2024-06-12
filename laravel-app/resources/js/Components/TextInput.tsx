@@ -40,4 +40,4 @@ export const TextInput = forwardRef(function TextInput(
   );
 });
 
-// TextInput.displayName = 'TextInput';
+TextInput.displayName = 'TextInput';
