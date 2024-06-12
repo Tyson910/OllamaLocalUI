@@ -2,6 +2,7 @@ import type { PageProps } from '@/types';
 import type { Convo, Message } from './types';
 
 import { useForm, Head } from '@inertiajs/react';
+import classNames from 'classnames';
 import ReactMarkdown from 'react-markdown';
 
 import RobotIcon from 'virtual:icons/fa6-solid/robot';
@@ -19,7 +20,7 @@ interface ConvoDetailProps extends PageProps {
 }
 
 export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: ConvoDetailProps) {
-  const { startStream, isPending, streamResponse, status } = useStreamResponse();
+  const { startStream, isPending, streamResponse, status, error } = useStreamResponse();
   const { data, setData, post, processing, reset, errors } = useForm({
     content: '',
     convo_id: convo.id,
@@ -49,6 +50,7 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
     });
   }
 
+  const isLoading = processing || isPending;
   return (
     <AuthenticatedLayout user={auth.user}>
       <Head title={convo.title} />
@@ -66,16 +68,20 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
           <textarea
             rows={5}
             name='message'
-            className={
-              'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-            }
+            disabled={isLoading}
+            className={classNames(
+              'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6',
+              isLoading && 'brightness-95',
+              (errors.content || error != null) && 'ring-red-500',
+            )}
             placeholder='Add your comment...'
             onChange={(e) => setData('content', e.target.value)}
             value={data.content}
           ></textarea>
           <InputError message={errors.content} className='mt-2' />
           <div className='mt-2 flex justify-end'>
-            <PrimaryButton>
+            {error ? <>An error has occured: {error.message}</> : null}
+            <PrimaryButton isLoading={isLoading}>
               {messages?.length == 0 ? 'New Convo' : 'Send'}{' '}
               <PaperAirplaneIcon className='size-4 ml-2' />
             </PrimaryButton>
