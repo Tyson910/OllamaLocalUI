@@ -13,6 +13,7 @@
         "@eslint/js": "^9.3.0",
         "@headlessui/react": "^1.4.2",
         "@iconify-json/fa6-solid": "^1.1.21",
+        "@iconify-json/heroicons": "^1.1.21",
         "@iconify-json/svg-spinners": "^1.1.2",
         "@inertiajs/react": "^1.0.0",
         "@svgr/core": "^8.1.0",
@@ -45,5 +46,6 @@
         "react-markdown": "^9.0.1",
         "unplugin-icons": "^0.19.0",
         "zod": "^3.23.8"
-    }
+    },
+    "packageManager": "pnpm@8.15.1+sha1.8adba2d20330c02d3856e18c4eb3819d1d3ca6aa"
 }
