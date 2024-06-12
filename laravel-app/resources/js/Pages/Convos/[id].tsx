@@ -87,7 +87,7 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
           ) : null}
           <div className='mt-2 flex justify-end'>
             <PrimaryButton isLoading={isLoading}>
-              {messages?.length == 0 ? 'New Convo' : 'Send'}{' '}
+              {error?.message ? 'Try Again' : messages?.length == 0 ? 'New Convo' : 'Send'}{' '}
               <PaperAirplaneIcon className='size-4 ml-2' />
             </PrimaryButton>
           </div>
