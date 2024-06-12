@@ -79,8 +79,13 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
             value={data.content}
           ></textarea>
           <InputError message={errors.content} className='mt-2' />
+          {error ? (
+            <InputError
+              message={`An unexpected error has occured: ${error.message}`}
+              className='mt-2'
+            />
+          ) : null}
           <div className='mt-2 flex justify-end'>
-            {error ? <>An error has occured: {error.message}</> : null}
             <PrimaryButton isLoading={isLoading}>
               {messages?.length == 0 ? 'New Convo' : 'Send'}{' '}
               <PaperAirplaneIcon className='size-4 ml-2' />
