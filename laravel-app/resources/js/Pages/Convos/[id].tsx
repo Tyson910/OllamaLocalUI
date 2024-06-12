@@ -3,10 +3,14 @@ import type { Convo, Message } from './types';
 
 import { useForm, Head } from '@inertiajs/react';
 import ReactMarkdown from 'react-markdown';
+
 import RobotIcon from 'virtual:icons/fa6-solid/robot';
-import { AuthenticatedLayout } from '@/Layouts/AuthenticatedLayout';
+import PaperAirplaneIcon from '~icons/heroicons/paper-airplane-20-solid';
+
 import { InputError } from '@/Components/InputError';
+import { InputLabel } from '@/Components/InputLabel';
 import { PrimaryButton } from '@/Components/PrimaryButton';
+import { AuthenticatedLayout } from '@/Layouts/AuthenticatedLayout';
 import { useStreamResponse, useTypeSafePage } from '@/utils/hooks';
 
 interface ConvoDetailProps extends PageProps {
@@ -51,18 +55,32 @@ export default function ConvoDetails({ auth, ziggy, convo, messages, ...rest }: 
       <div className='max-w-2xl mx-auto p-4 sm:p-6 lg:p-8'>
         <h1 className='text-6xl mb-4 font-bold text-center dark:text-white'>{convo.title}</h1>
         <MessageHistory messages={messages} />
-        <ReactMarkdown className='dark:text-white' children={streamResponse?.message.content} />
+        <ReactMarkdown
+          className='dark:text-white mb-5'
+          children={streamResponse?.message.content}
+        />
         <form onSubmit={saveStreamedMessageToDB}>
+          <InputLabel htmlFor='message' className='sr-only'>
+            New Message
+          </InputLabel>
           <textarea
-            className='block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm'
+            rows={5}
+            name='message'
+            className={
+              'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+            }
+            placeholder='Add your comment...'
             onChange={(e) => setData('content', e.target.value)}
             value={data.content}
           ></textarea>
           <InputError message={errors.content} className='mt-2' />
+          <div className='mt-2 flex justify-end'>
+            <PrimaryButton>
+              {messages?.length == 0 ? 'New Convo' : 'Send'}{' '}
+              <PaperAirplaneIcon className='size-4 ml-2' />
+            </PrimaryButton>
+          </div>
           <p className='dark:text-white'>{status}</p>
-          <PrimaryButton className='mt-4' disabled={processing} isLoading={isPending}>
-            {messages?.length == 0 ? 'New Convo' : 'Submit'}
-          </PrimaryButton>
         </form>
       </div>
     </AuthenticatedLayout>
