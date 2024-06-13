@@ -34,6 +34,13 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
+   
+        $path = $request->file('avatar')->storeAs(
+            // each user should have one avatar img
+            'public/avatar', $request->user()->id.'.png'
+        );
+
+        $request->user()->avatar = $path;
 
         $request->user()->save();
 

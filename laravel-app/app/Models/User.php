@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -18,6 +19,16 @@ class User extends Authenticatable
         return $this->hasMany(Convo::class);
     }
 
+        /**
+     * Get the user's last name concatenated with the suffix.
+     *
+     * @return string
+     */
+    public function getAvatarAttribute()
+    {
+        $contents = Storage::url($this->attributes['avatar']);
+        return $contents;
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +38,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
