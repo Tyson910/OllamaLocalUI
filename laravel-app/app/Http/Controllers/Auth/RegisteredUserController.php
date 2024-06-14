@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Validation\Rules\File;
 
 class RegisteredUserController extends Controller
 {
@@ -35,14 +36,23 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'avatar' => File::image()->types(['png', 'jpg'])->min('1kb')->max('10mb'),
         ]);
+
+
+        $auto_gen_id = Str::ulid()->toBase32();
+        $path = $request->file('avatar')->storeAs(
+            // each user should have one avatar img
+            'public/avatar', $auto_gen_id.'.png'
+        );
 
         $user = User::create([
             // auto generate ulid
-            'id' => Str::ulid()->toBase32(),
+            'id' => $auto_gen_id,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'avatar' => $path,
         ]);
 
         event(new Registered($user));

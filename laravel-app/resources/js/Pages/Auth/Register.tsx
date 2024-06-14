@@ -1,5 +1,6 @@
 import { useEffect, type FormEventHandler } from 'react';
 import { GuestLayout } from '@/Layouts/GuestLayout';
+import { FileUploadInput } from '@/Components/FileUploadInput';
 import { InputError } from '@/Components/InputError';
 import { InputLabel } from '@/Components/InputLabel';
 import { PrimaryButton } from '@/Components/PrimaryButton';
@@ -7,11 +8,12 @@ import { TextInput } from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
 export default function Register() {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data, setData, post, processing, errors, reset, progress } = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    avatar: undefined,
   });
 
   useEffect(() => {
@@ -63,6 +65,23 @@ export default function Register() {
           />
 
           <InputError message={errors.email} className='mt-2' />
+        </div>
+
+        <div>
+          {progress && (
+            <progress value={progress.percentage} max='100'>
+              {progress.percentage}%
+            </progress>
+          )}
+          <InputLabel htmlFor='avatar' value='Avatar' />
+          <InputError className='mt-2' message={errors.avatar} />
+          <FileUploadInput
+            id='avatar'
+            name='avatar'
+            file={data?.avatar}
+            // @ts-expect-error idk
+            handleChange={(e) => setData('avatar', e.target.files[0])}
+          />
         </div>
 
         <div className='mt-4'>

@@ -1,4 +1,4 @@
-import type { FormEventHandler, ComponentPropsWithoutRef } from 'react';
+import type { FormEventHandler } from 'react';
 import type { PageProps } from '@/types';
 
 import { InputError } from '@/Components/InputError';
@@ -7,14 +7,8 @@ import { PrimaryButton } from '@/Components/PrimaryButton';
 import { TextInput } from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
-import PhotoIcon from 'virtual:icons/heroicons/photo-20-solid';
+import { FileUploadInput } from '@/Components/FileUploadInput';
 
-function getImgURL(img: string | File) {
-  if (img instanceof File) {
-    return URL.createObjectURL(img);
-  }
-  return img;
-}
 export function UpdateProfileInformationForm({
   mustVerifyEmail,
   status,
@@ -63,6 +57,7 @@ export function UpdateProfileInformationForm({
             id='avatar'
             name='avatar'
             file={data?.avatar}
+            // @ts-expect-error idk
             handleChange={(e) => setData('avatar', e.target.files[0])}
           />
         </div>
@@ -132,51 +127,5 @@ export function UpdateProfileInformationForm({
         </div>
       </form>
     </section>
-  );
-}
-
-function FileUploadInput({
-  file,
-  handleChange,
-  ...props
-}: {
-  file?: string | File;
-  handleChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
-} & Omit<ComponentPropsWithoutRef<'input'>, 'type'>) {
-  if (!file) {
-    return (
-      <div className='mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
-        <div className='text-center'>
-          <PhotoIcon className='mx-auto size-12 text-gray-300' aria-hidden='true' />
-          <div className='mt-4 flex text-sm leading-6 text-gray-600'>
-            <InputLabel
-              htmlFor={props.id}
-              className='relative cursor-pointer rounded-md py-1 px-2 bg-white dark:text-gray-800 font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'
-            >
-              <span>Upload a file</span>
-              <input onChange={handleChange} {...props} type='file' className='sr-only' />
-            </InputLabel>
-            <p className='pl-1'>or drag and drop</p>
-          </div>
-          <p className='text-xs leading-5 text-gray-600'>PNG, JPG up to 10MB</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Otherwise we have a file/img to show
-  return (
-    <>
-      <div className='mt-2 flex items-center gap-x-3'>
-        <img className='inline-block size-32 object-cover rounded-full' src={getImgURL(file)} />
-        <InputLabel
-          htmlFor={props.id}
-          className='relative cursor-pointer rounded-md py-1 px-2 bg-white font-semibold dark:text-gray-800 text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2'
-        >
-          <span>Change</span>
-          <input onChange={handleChange} {...props} type='file' className='sr-only' />
-        </InputLabel>
-      </div>
-    </>
   );
 }
